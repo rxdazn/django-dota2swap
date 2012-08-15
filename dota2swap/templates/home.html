@@ -1,0 +1,10 @@
+<p>index</p>
+{% if auth_url %}
+<form action="{{ action }}" method="post">
+    {% csrf_token %}
+    <p> <a href={{ auth_url }}>log in</a></p>
+    {% if username %}
+    you are {{ username }}
+    {% endif %}
+</form>
+{% endif %}
