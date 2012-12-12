@@ -2,5 +2,4 @@ Django==1.4.1
 South==0.7.6
 django-debug-toolbar==0.9.4
 django-openid-auth==0.4
-psycopg2==2.4.5
 python-openid==2.2.5
