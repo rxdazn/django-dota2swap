@@ -14,11 +14,11 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': settings_local.DB_NAME,
-        'USER': settings_local.DB_USER,
-        'PASSWORD': settings_local.DB_PW,
-        'HOST': settings_local.DB_HOST,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(PROJECT_DIR, 'db/dota2swap.db'),
+        'USER': '', 
+        'PASSWORD': '',
+        'HOST': '',
         'PORT': '',
     }
 }
@@ -38,9 +38,6 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
 )
 
 STATICFILES_FINDERS = (
@@ -85,9 +82,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'south',
-    'debug_toolbar',
-    'django_openid_auth',
-    'accounts',
+    #'debug_toolbar',
+    #'django_openid_auth',
 )
 
 LOGIN_URL = '/login/'
@@ -105,7 +101,8 @@ AUTHENTICATION_BACKENDS = (
     'django_openid_auth.auth.OpenIDBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-OPENID_CREATE_USER = True
+
+OPENID_CREATE_USERS = True
 ALLOWED_EXTERNAL_OPENID_REDIRECT_DOMAINS = ['http://steamcommunity.com/']
 OPENID_UPDATE_DETAILS_FROM_SREG = False
 OPENID_SSO_SERVER_URL = settings_local.STEAM_OPENID_ENDPOINT

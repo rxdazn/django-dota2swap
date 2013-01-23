@@ -1,6 +1,8 @@
 *.swp
 *.pyc
 *~
+*.db
 
 settings_local.py
 migrations
+venv
