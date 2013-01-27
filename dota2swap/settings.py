@@ -82,8 +82,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'south',
-    #'debug_toolbar',
-    #'django_openid_auth',
+    'debug_toolbar',
+    'django_openid_auth',
+    'accounts',
 )
 
 LOGIN_URL = '/login/'
@@ -106,7 +107,7 @@ OPENID_CREATE_USERS = True
 ALLOWED_EXTERNAL_OPENID_REDIRECT_DOMAINS = ['http://steamcommunity.com/']
 OPENID_UPDATE_DETAILS_FROM_SREG = False
 OPENID_SSO_SERVER_URL = settings_local.STEAM_OPENID_ENDPOINT
-AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+AUTH_PROFILE_MODULE = 'accounts.Member'
 #OPENID_USE_AS_ADMIN_LOGIN = True 
 
 LOGGING = {
