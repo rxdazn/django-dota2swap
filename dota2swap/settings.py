@@ -82,8 +82,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'south',
-    #'debug_toolbar',
-    #'django_openid_auth',
+    'debug_toolbar',
+    'django_openid_auth',
+    'accounts',
 )
 
 LOGIN_URL = '/login/'
