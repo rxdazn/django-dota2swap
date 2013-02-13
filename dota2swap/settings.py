@@ -83,12 +83,13 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'south',
     'debug_toolbar',
-    'django_openid_auth',
     'accounts',
+    'social_auth',
 )
 
 LOGIN_URL = '/login/'
-LOGOUT = '/logout/'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_ERROR_URL = '/login_error'
 
 # django-debug-toolbar
 INTERNAL_IPS = ('127.0.0.1',)
@@ -97,18 +98,18 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TEMPLATE_CONTEXT': True,
 }
 
-# django-openid-auth
+# auth
 AUTHENTICATION_BACKENDS = (
-    'django_openid_auth.auth.OpenIDBackend',
+    'dota2swap.auth.steam.SteamBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
-OPENID_CREATE_USERS = True
-ALLOWED_EXTERNAL_OPENID_REDIRECT_DOMAINS = ['http://steamcommunity.com/']
-OPENID_UPDATE_DETAILS_FROM_SREG = False
-OPENID_SSO_SERVER_URL = settings_local.STEAM_OPENID_ENDPOINT
-AUTH_PROFILE_MODULE = 'accounts.Member'
-#OPENID_USE_AS_ADMIN_LOGIN = True 
+# django-social-auth
+SOCIAL_AUTH_PIPELINE = (
+        'accounts.models.update_users_details',
+)
+
+SOCIAL_AUTH_USER_MODEL = 'accounts.member.Member'
 
 LOGGING = {
     'version': 1,
