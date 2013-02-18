@@ -81,7 +81,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
-    'south',
+    #'south',
     'debug_toolbar',
     'accounts',
     'social_auth',
@@ -100,16 +100,13 @@ DEBUG_TOOLBAR_CONFIG = {
 
 # auth
 AUTHENTICATION_BACKENDS = (
-    'dota2swap.auth.steam.SteamBackend',
+    'social_auth.backends.steam.SteamBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
-# django-social-auth
-SOCIAL_AUTH_PIPELINE = (
-        'accounts.models.update_users_details',
-)
+STEAM_API_KEY = settings_local.STEAM_API_KEY
 
-SOCIAL_AUTH_USER_MODEL = 'accounts.member.Member'
+SOCIAL_AUTH_USER_MODEL = 'accounts.Member'
 
 LOGGING = {
     'version': 1,
