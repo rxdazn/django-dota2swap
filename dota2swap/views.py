@@ -1,9 +1,7 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 
 def home(request):
-    if request.user.is_authenticated():
-        return render_to_response('home.html', {'username': request.openid.identity})
-    else:
-        return render_to_response('home.html', {'auth_url': '/openid/login/'})
+    print 'request.user.is_authenticated', request.user.is_authenticated()
+    return render(request, 'home.html')

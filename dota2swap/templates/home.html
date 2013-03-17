@@ -1,10 +1,6 @@
-<p>index</p>
-{% if auth_url %}
-<form action="{{ action }}" method="post">
-    {% csrf_token %}
-    <p> <a href="{% url socialauth_begin 'steam' %}">log in</a></p>
-    {% if username %}
-    you are {{ username }}
-    {% endif %}
-</form>
+<h1>index</h1>
+{% if user.is_authenticated %}
+<p>you are {{ user }}, steam id : {{ user.steam_id }}</p>
+{% else %}
+    <p> <a href="{% url 'socialauth_begin' 'steam' %}">log in</a></p>
 {% endif %}
