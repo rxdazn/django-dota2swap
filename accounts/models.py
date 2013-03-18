@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser 
 from django.utils import timezone
 
+from dota2swap.shop import Item
+
 
 class MemberManager(BaseUserManager):
 
@@ -22,17 +24,18 @@ class MemberManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class   Member(AbstractBaseUser):
-    username = models.CharField(max_length=50)
-    nickname  = models.CharField(max_length=128)
+class Member(AbstractBaseUser):
+    username = models.CharField(max_length=50) # permanent username
+    nickname  = models.CharField(max_length=128) # display name
+    steam_id = models.CharField(max_length=20)
     email = models.EmailField(max_length=256, null=True, blank=True, unique=True, db_index=True)
     date_joined = models.DateTimeField()
-    steam_id = models.CharField(max_length=20)
-    reputation = models.IntegerField(default=0)
-    transactions_completed = models.IntegerField(default=0)
     avatar_small = models.URLField()
     avatar_medium = models.URLField()
     avatar_full = models.URLField()
+    reputation = models.IntegerField(default=0)
+    transactions_completed = models.IntegerField(default=0)
+    # items = models.ForeignKey(Item)
     # transactions = models.ForeignKey(Transaction)
     is_admin = models.BooleanField(default=False)
 
