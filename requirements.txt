@@ -1,5 +1,7 @@
-Django==1.4.1
+Django==1.5
 South==0.7.6
 django-debug-toolbar==0.9.4
-django-openid-auth==0.4
+django-social-auth==0.7.20
+httplib2==0.7.7
+oauth2==1.5.211
 python-openid==2.2.5
