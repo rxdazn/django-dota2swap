@@ -2,13 +2,12 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser 
 from django.utils import timezone
 
-from dota2swap.shop import Item
+#from shop.models import Item
 
 
 class MemberManager(BaseUserManager):
 
     def create_user(self, username, email=None, password=None, **extra_fields):
-        now = timezone.now()
         now = timezone.now()
         user = self.model(username=username,
                 email=email,

@@ -83,8 +83,10 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     #'south',
     'debug_toolbar',
-    'accounts',
     'social_auth',
+    'dota2swap',
+    'accounts',
+    'shop'
 )
 
 LOGIN_URL = '/login/'
