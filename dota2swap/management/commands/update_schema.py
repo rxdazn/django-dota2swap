@@ -18,7 +18,7 @@ class Command(BaseCommand):
         verbose = options.get('verbosity')
         self.stdout.write('Fetching item schema...')
         schema = SteamWrapper.get_schema()
-        if schema['result']['status']: 
+        if schema['result']['status']:
             self.stdout.write('Successfully fetched item schema.')
             result = schema['result']
 
@@ -34,14 +34,21 @@ class Command(BaseCommand):
             self.stdout.write('Processing items (%d)...' %
                     len(result['items']))
             for item in result['items']:
-                obj, created = models.Item.objects.get_or_create(defindex=item['defindex'],
-                        defaults={
-                            'name': item['name'],
-                            'string_token': item['item_name'],
-                            'type_token': item['item_type_name'],
-                            'proper_name': item['proper_name'],
-                    })
-
+                try:
+                    obj = models.Item.objects.get(defindex=item['defindex'])
+                except DoesNotExist:
+                    obj = models.Item.objects.create(defintex=item['defindex'],
+                            'name': item.get('name'),
+                            'string_token': item.get('item_name'),
+                            'type_token': item.get('item_type_name'),
+                            'proper_name': item.get('proper_name'),
+                            'quality': quality,
+                            'item_class': item.get('item_class'),
+                            'image': item.get('image_url'),
+                            'image_large': item.get('image_large_url'),
+                            'min_ilevel': item.get('min_ilevel'),
+                            'max_ilevel': item.get('max_ilevel'),
+                            )
             self.stdout.write('Processing item attributes (%d)...' %
                     len(result['attributes']))
 
