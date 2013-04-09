@@ -33,22 +33,30 @@ class Command(BaseCommand):
 
             self.stdout.write('Processing items (%d)...' %
                     len(result['items']))
-            for item in result['items']:
+            for val, item in enumerate(result['items']):
+                quality, created = models.ItemQuality.objects.get_or_create(value=item['item_quality'], name='qualitemp')
                 try:
                     obj = models.Item.objects.get(defindex=item['defindex'])
-                except DoesNotExist:
-                    obj = models.Item.objects.create(defintex=item['defindex'],
-                            'name': item.get('name'),
-                            'string_token': item.get('item_name'),
-                            'type_token': item.get('item_type_name'),
-                            'proper_name': item.get('proper_name'),
-                            'quality': quality,
-                            'item_class': item.get('item_class'),
-                            'image': item.get('image_url'),
-                            'image_large': item.get('image_large_url'),
-                            'min_ilevel': item.get('min_ilevel'),
-                            'max_ilevel': item.get('max_ilevel'),
-                            )
+                    #print 'obj already existing !', [(field.name, field.value) for field in obj._meta.fields()]
+                except models.Item.DoesNotExist:
+                    item_infos = {
+                        'defindex': item['defindex'],
+                        'name': item['name'],
+                        'description_token': item['item_name'],
+                        'type_token': item['item_type_name'],
+                        'proper_name': item['proper_name'],
+                        'quality': quality,
+                        'item_class': item['item_class'],
+                        'image': item['image_url'],
+                        'image_large': item['image_url_large'],
+                        'min_ilevel': item['min_ilevel'],
+                        'max_ilevel': item['max_ilevel'],
+                    }
+                    obj = models.Item(**item_infos)
+                    # obj.save()
+                    print 'obj defindex', obj.defindex, obj.name
+                if val > 9: #only creating 10 for now -- testing
+                    break
             self.stdout.write('Processing item attributes (%d)...' %
                     len(result['attributes']))
 
