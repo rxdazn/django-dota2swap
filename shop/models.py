@@ -2,9 +2,27 @@ from django.db import models
 
 from accounts.models import Member
 
+# raw json:
+# https://gist.github.com/rxdazn/f1da0609ffc9f597d4b3/raw/077b8cc5f879fc31bc0958d982392e624e0b60c5/schema.json
+
+# see http://wiki.teamfortress.com/wiki/WebAPI/GetSchema
+# for details about these models
 
 class ItemQuality(models.Model):
     value = models.IntegerField(unique=True)
+    name = models.CharField(max_length=50)
+
+
+class ItemOrigin(models.Model):
+    value = models.IntegerField(unique=True)
+    name = models.CharField(max_length=50)
+
+
+class ItemParticles(models.Model):
+    value = models.IntegerField(unique=True)
+    attach_to_rootbone = models.BooleanField(default=False)
+    attachment = models.CharField(null=True, blank=True, max_length=50)
+    system = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
 
 
@@ -15,6 +33,23 @@ class ItemCapabilities(models.Model):
     strange_parts = models.BooleanField()
     usable_out_of_game = models.BooleanField()
     usable_gc = models.BooleanField()
+
+
+class ItemLevel(models.Model):
+    name = models.CharField(max_length=50)
+    level = models.IntegerField()
+    required_score = models.IntegerField()
+
+
+class KillEaterRank(models.Model):
+    name = models.CharField(max_length=50)
+    level = models.IntegerField()
+    required_score = models.IntegerField()
+
+
+class KillEaterScoreType(models.Model):
+    type = models.IntegerField()
+    type_name = models.CharField(max_length=50)
 
 
 class Attribute(models.Model):
@@ -35,7 +70,7 @@ class Item(models.Model):
     defindex = models.IntegerField(unique=True) # item's unique ID
     name = models.CharField(max_length=100) # proper name with spaces
     type_token = models.CharField(max_length=100) # #DOTA_WearableTyep_Daggers
-    description_token = models.CharField(max_length=100) # #DOTA_Item_Rikis_Dagger 
+    description_token = models.CharField(max_length=100) # #DOTA_Item_Rikis_Dagger
     description = models.TextField(null=True, blank=True)
     #capabilities = models.ForeignKey(ItemCapabilities, null=True, blank=True)
     # tool = models.ForeignKey(Tool, null=True, blank=True) # e.g bundles #OpenPack token
@@ -54,6 +89,7 @@ class ItemSet(models.Model):
     item_set = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     store_bundle = models.CharField(max_length=100)
+     # FIXME items ?
 
 
 class Transaction(models.Model):

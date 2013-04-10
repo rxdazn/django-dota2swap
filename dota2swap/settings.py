@@ -16,7 +16,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(PROJECT_DIR, 'db/dota2swap.db'),
-        'USER': '', 
+        'USER': '',
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
@@ -81,7 +81,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
-    #'south',
+    'south',
     'debug_toolbar',
     'social_auth',
     'dota2swap',
