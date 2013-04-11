@@ -15,7 +15,7 @@ class Command(BaseCommand):
                 help='Verbosity level')
 
 
-    def process_origin_names(self, result):
+    def process_origin_names(self, result, verbose):
         self.stdout.write('Processing item origins (%d)...' %
                 len(result['originNames']))
         for origin_name in result['originNames']:
@@ -30,12 +30,12 @@ class Command(BaseCommand):
                     )
 
 
-    def process_item_particles(self, result):
+    def process_item_particles(self, result, verbose):
         self.stdout.write('Processing controlled item attached particles (%d)...' %
                 len(result['attribute_controlled_attached_particles']))
 
         for item_particle in result['attribute_controlled_attached_particles']:
-            origin, created = models.ItemOrigin.objects.get_or_create(
+            origin, created = models.ItemParticles.objects.get_or_create(
                     value=item_particle['id'],
                     name=item_particle['name'],
                     system=item_particle['system'],
@@ -49,7 +49,7 @@ class Command(BaseCommand):
                     )
 
 
-    def process_item_quality(self, result):
+    def process_item_quality(self, result, verbose):
         self.stdout.write('Processing item qualities (%d)...' %
                 len(result['qualities']))
 
@@ -65,7 +65,7 @@ class Command(BaseCommand):
                     )
 
 
-    def process_item_attributes(self, result):
+    def process_item_attributes(self, result, verbose):
         self.stdout.write('Processing item attributes (%d)...' %
                 len(result['attributes']))
 
@@ -90,7 +90,7 @@ class Command(BaseCommand):
                     )
 
 
-    def process_item_sets(self, result):
+    def process_item_sets(self, result, verbose):
         # FIXME items ?
         self.stdout.write('Processing item sets (%d)...' %
                 len(result['item_sets']))
@@ -106,7 +106,7 @@ class Command(BaseCommand):
                     iset.name,)
                     )
 
-    def process_kill_eater_ranks(self, result):
+    def process_kill_eater_ranks(self, result, verbose):
         self.stdout.write('Processing item kill eater ranks (%d)...' %
                 len(result['kill_eater_ranks']))
 
@@ -123,7 +123,7 @@ class Command(BaseCommand):
                     )
 
 
-    def process_item_levels(self, result):
+    def process_item_levels(self, result, verbose):
         self.stdout.write('Processing item levels (%d)...' %
                 len(result['item_levels']))
 
@@ -140,7 +140,7 @@ class Command(BaseCommand):
                     )
 
 
-    def process_kill_eater_score_types(self, result):
+    def process_kill_eater_score_types(self, result, verbose):
         self.stdout.write('Processing kill eater score types (%d)...' %
                 len(result['kill_eater_score_types']))
 
@@ -165,14 +165,14 @@ class Command(BaseCommand):
             self.stdout.write('Successfully fetched item schema.')
             result = schema['result']
 
-            self.process_origin_names(result)
-            self.process_item_particles(result)
-            self.process_item_quality(result)
-            self.process_item_attributes(result)
-            self.process_item_sets(result)
-            self.process_item_levels(result)
-            self.process_kill_eater_ranks(result)
-            self.process_kill_eater_score_types(result)
+            self.process_origin_names(result, verbose)
+            self.process_item_particles(result, verbose)
+            self.process_item_quality(result, verbose)
+            self.process_item_attributes(result, verbose)
+            self.process_item_sets(result, verbose)
+            self.process_item_levels(result, verbose)
+            self.process_kill_eater_ranks(result, verbose)
+            self.process_kill_eater_score_types(result, verbose)
 
             self.stdout.write('Processing items (%d)...' %
                     len(result['items']))
