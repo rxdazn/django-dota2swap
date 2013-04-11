@@ -14,10 +14,14 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_DIR, 'db/dota2swap.db'),
-        'USER': '',
-        'PASSWORD': '',
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(PROJECT_DIR, 'db/dota2swap.db'),
+        #'USER': '',
+        #'PASSWORD': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'django_d2s',
+        'USER': 'rxdazn',
+        'PASSWORD': 'rxdazn',
         'HOST': '',
         'PORT': '',
     }
