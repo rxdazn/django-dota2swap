@@ -40,6 +40,7 @@ class Member(AbstractBaseUser):
 
     objects = MemberManager()
 
+
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['username',]
 
@@ -61,3 +62,17 @@ class Member(AbstractBaseUser):
 
     pre_update.connect(user_update_handler, sender=SteamBackend)
     socialauth_registered.connect(user_creation_handler, sender=None)
+
+    def update_inventory(self):
+        inventory_json = SteamWrapper.get_player_inventory(self.steam_id)
+        if inventory_json['status'] is 1:
+            return 'Sucessfuly updated inventory.'
+        elif inventory_json['status'] is 8:
+            return 'Couldn\'t update inventory. The steamid parameter was invalid or missing.'
+        elif inventory_json['status'] is 15:
+            return 'Couldn\'t update inventory. Backpack is private.'
+        elif inventory_json['status'] is 18:
+            return 'Couldn\'t update inventory. Backpack is private.'
+
+
+

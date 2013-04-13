@@ -16,8 +16,8 @@ class   SteamWrapper():
 
     @classmethod
     def get_schema(cls):
-        return cls._send_request(settings_local.STEAM_SCHEMA_ENDPOINT)
+        return cls._send_request(settings_local.STEAM_SCHEMA_ENDPOINT, language='en')
 
     @classmethod
     def get_player_inventory(cls, player_id):
-        return cls._send_request(settings_local.STEAM_PLAYER_ITEMS_ENDPOINT, SteamID = player_id)
+        return cls._send_request(settings_local.STEAM_PLAYER_ITEMS_ENDPOINT, SteamID=player_id)

@@ -30,15 +30,15 @@ class ItemParticles(models.Model):
 
 
 class ItemCapabilities(models.Model):
-    can_craft_mark = models.NullBooleanField(null=True)
-    nameable = models.NullBooleanField(null=True)
-    can_gift_wrap = models.NullBooleanField(null=True)
-    can_be_restored = models.NullBooleanField(null=True)
-    decodable = models.NullBooleanField(null=True)
-    paintable_unusual = models.NullBooleanField(null=True)
-    strange_parts = models.NullBooleanField(null=True)
-    usable_gc = models.NullBooleanField(null=True)
-    usable_out_of_game = models.NullBooleanField(null=True)
+    can_craft_mark = models.NullBooleanField()
+    nameable = models.NullBooleanField()
+    can_gift_wrap = models.NullBooleanField()
+    can_be_restored = models.NullBooleanField()
+    decodable = models.NullBooleanField()
+    paintable_unusual = models.NullBooleanField()
+    strange_parts = models.NullBooleanField()
+    usable_gc = models.NullBooleanField()
+    usable_out_of_game = models.NullBooleanField()
 
 
 class ItemLevel(models.Model):
@@ -79,6 +79,14 @@ class ItemAttribute(models.Model):
     attribute = models.ForeignKey(Attribute)
     value = models.IntegerField()
 
+class AccountInfo(models.Model):
+    steam_id = models.CharField(max_length=100)
+    personaname = models.CharField(max_length=100)
+
+class InventoryItemAttribute(ItemAttribute):
+    float_value = models.FloatField(null=True, blank=True)
+    account_info = models.ForeignKey(AccountInfo, null=True, blank=True)
+
 class Item(models.Model):
     defindex = models.IntegerField(unique=True) # item's unique ID
     name = models.CharField(max_length=100) # proper name with spaces
@@ -104,6 +112,22 @@ class ItemSet(models.Model):
     store_bundle = models.CharField(max_length=100, null=True, blank=True)
     items = models.ManyToManyField(Item)
     attributes = models.ManyToManyField(ItemAttribute, null=True, blank=True)
+
+class InventoryItem(models.Model):
+    id = models.IntegerField()
+    original_id = models.IntegerField()
+    defindex = models.IntegerField()
+    level = models.IntegerField()
+    quantity = models.IntegerField()
+    origin = models.ForeignKey(ItemOrigin)
+    inventory = models.IntegerField(null=True, blank=True)
+    flag_cannot_trade = models.NullBooleanField()
+    flag_cannot_craft = models.NullBooleanField()
+    quality = models.ForeignKey(ItemQuality)
+    custom_name = models.CharField(max_length=200, null=True, blank=True)
+    custom_description = models.CharField(max_length=200, null=True, blank=True)
+    contained_item = models.CharField(max_length=600, null=True, blank=True)
+    attributes = models.ForeignKey(InventoryItemAttribute, null=True, blank=True)
 
 
 class Transaction(models.Model):
