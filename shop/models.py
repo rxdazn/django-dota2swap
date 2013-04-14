@@ -114,7 +114,7 @@ class ItemSet(models.Model):
     attributes = models.ManyToManyField(ItemAttribute, null=True, blank=True)
 
 class InventoryItem(models.Model):
-    id = models.IntegerField()
+    unique_id = models.IntegerField()
     original_id = models.IntegerField()
     defindex = models.IntegerField()
     level = models.IntegerField()
@@ -127,9 +127,9 @@ class InventoryItem(models.Model):
     custom_name = models.CharField(max_length=200, null=True, blank=True)
     custom_description = models.CharField(max_length=200, null=True, blank=True)
     contained_item = models.CharField(max_length=600, null=True, blank=True)
-    attributes = models.ForeignKey(InventoryItemAttribute, null=True, blank=True)
+    attributes = models.ManyToManyField(InventoryItemAttribute, null=True, blank=True)
 
 
 class Transaction(models.Model):
-    item_pack = models.ForeignKey(Item)
-    creator = models.OneToOneField(Member)
+    item_pack = models.ManyToManyField(InventoryItem)
+    visible = models.BooleanField(default=True)
