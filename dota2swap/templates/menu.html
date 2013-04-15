@@ -1,0 +1,15 @@
+{% load staticfiles %}
+
+<div class="navbar navbar-static-top">
+    <div class="navbar-inner">
+        <a class="brand" href="{% url 'home' %}">Dota2Swap</a>
+        <ul class="nav">
+            <li class="active"><a href="{% url 'home' %}">Home</a></li>
+        </ul>
+        {% if user.is_authenticated %}
+        <p class="navbar-text pull-right menu-text">Logged as {{ user }} / <a href="{% url 'logout' %}">Logout</a></p>
+        {% else %}
+        <a class="menu-image pull-right" href="{% url 'socialauth_begin' 'steam' %}"><img src="{% static 'img/steam-login.png' %}" alt="Login with Steam" /></a>
+        {% endif %}
+    </div>
+</div>

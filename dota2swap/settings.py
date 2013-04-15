@@ -14,16 +14,16 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_DIR, 'db/dota2swap.db'),
-        'USER': '',
-        'PASSWORD': '',
-        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #'NAME': 'django_d2s',
-        #'USER': 'rxdazn',
-        #'PASSWORD': 'rxdazn',
-        'HOST': '',
-        'PORT': '',
+#       'ENGINE': 'django.db.backends.sqlite3',
+#       'NAME': os.path.join(PROJECT_DIR, 'db/dota2swap.db'),
+#       'USER': '',
+#       'PASSWORD': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dota2swap',
+        'USER': 'dota2swap',
+        'PASSWORD': 'dota2swap',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -85,7 +85,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
-    #'south',
+    'south',
     'debug_toolbar',
     'social_auth',
     'dota2swap',
@@ -100,7 +100,7 @@ LOGIN_ERROR_URL = '/login_error'
 # django-debug-toolbar
 INTERNAL_IPS = ('127.0.0.1',)
 DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': True,
+    'INTERCEPT_REDIRECTS': False,
     'SHOW_TEMPLATE_CONTEXT': True,
 }
 

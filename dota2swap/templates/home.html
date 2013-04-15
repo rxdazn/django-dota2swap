@@ -1,6 +1,7 @@
-<h1>index</h1>
-{% if user.is_authenticated %}
-<p>you are {{ user }}, steam id : {{ user.steam_id }}</p>
-{% else %}
-    <p> <a href="{% url 'socialauth_begin' 'steam' %}">log in</a></p>
-{% endif %}
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <h1>index</h1>
+{% endblock %}

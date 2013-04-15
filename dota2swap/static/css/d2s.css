@@ -1,0 +1,13 @@
+.menu-image {
+    line-height: 46px;
+    vertical-align: middle;
+}
+
+.menu-text a {
+    color: rgb(45, 134, 185);
+}
+
+.menu-text a:hover, .menu-text a:focus {
+    color: rgb(60, 158, 216);
+    text-decoration: none;
+}

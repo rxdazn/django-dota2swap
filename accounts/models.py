@@ -1,6 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser 
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.utils import timezone
+
+from django.contrib import messages
 
 #from shop.models import Item
 
@@ -50,7 +52,7 @@ class Member(AbstractBaseUser):
     def user_update_handler(sender, user, response, details, **kwargs):
 
         user.username = details['username']
-        user.nickname = details['player']['personaname'] 
+        user.nickname = details['player']['personaname']
         user.avatar_small = details['player']['avatar']
         user.avatar_medium = details['player']['avatarmedium']
         user.avatar_full = details['player']['avatarfull']
@@ -106,7 +108,7 @@ class Member(AbstractBaseUser):
                 item.save()
                 item.attributes.add(*attributes)
             return 'Sucessfuly updated inventory.'
-            
+
         elif inventory_json['status'] is 8:
             return 'Couldn\'t update inventory. The steamid parameter was invalid or missing.'
         elif inventory_json['status'] is 15:
