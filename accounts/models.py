@@ -4,9 +4,6 @@ from django.utils import timezone
 
 from django.contrib import messages
 
-#from shop.models import Item
-
-
 class MemberManager(BaseUserManager):
 
     def create_user(self, username, email=None, password=None, **extra_fields):
@@ -26,6 +23,7 @@ class MemberManager(BaseUserManager):
         return user
 
 class Member(AbstractBaseUser):
+
     username = models.CharField(max_length=50) # permanent username
     nickname  = models.CharField(max_length=128) # display name
     steam_id = models.CharField(max_length=20)
@@ -36,7 +34,7 @@ class Member(AbstractBaseUser):
     avatar_full = models.URLField()
     reputation = models.IntegerField(default=0)
     transactions_completed = models.IntegerField(default=0)
-    # items = models.ForeignKey(Item)
+    items = models.ManyToManyField('shop.InventoryItem')
     # transactions = models.ForeignKey(Transaction)
     is_admin = models.BooleanField(default=False)
 
@@ -69,12 +67,17 @@ class Member(AbstractBaseUser):
     socialauth_registered.connect(user_creation_handler, sender=None)
 
     def update_inventory(self):
-        inventory_json = SteamWrapper.get_player_inventory(self.steam_id)
+        from dota2swap.utils.api import SteamWrapper
+        from shop import models
+
+        inventory_json = SteamWrapper.get_player_inventory(self.steam_id)['result']
         if inventory_json['status'] is 1:
             items = []
-            for item in inventory['items']:
-                origin = models.ItemOrigin.objects.get(value=items['origin'])
-                quality = models.ItemQuality.objects.get(value=items['quality'])
+            for item in inventory_json['items']:
+                origin=None
+                if 'origin' in item:
+                    origin = models.ItemOrigin.objects.get(value=item['origin'])
+                quality = models.ItemQuality.objects.get(value=item['quality'])
                 attributes = []
                 if 'attributes' in item:
                     for attribute in item['attributes']:
@@ -90,12 +93,13 @@ class Member(AbstractBaseUser):
                             account_info=account_info)
                         attributes.append(attribute)
 
-                item, created = models.InventoryItem.objects.get_or_create(
+                print 'item', item
+                item = models.InventoryItem(
                         unique_id=item['id'],
                         original_id=item['original_id'],
                         defindex=item['defindex'],
                         level=item['level'],
-                        quantity=item['quantiy'],
+                        quantity=item['quantity'],
                         origin=origin,
                         inventory=item.get('inventory'),
                         flag_cannot_trade=item.get('flag_cannot_trade'),
@@ -105,8 +109,12 @@ class Member(AbstractBaseUser):
                         custom_description=item.get('custom_desc'),
                         contained_item=item.get('contained_item'),
                         )
-                item.save()
-                item.attributes.add(*attributes)
+                try:
+                    item.save()
+                except Exception as e:
+                    print 'except', dir(e)
+                    print '-->', e.pgcode, e.pgerror, e.message
+                #item.attributes.add(*attributes)
             return 'Sucessfuly updated inventory.'
 
         elif inventory_json['status'] is 8:
