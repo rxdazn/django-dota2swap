@@ -5,9 +5,12 @@
         <a class="brand" href="{% url 'home' %}">Dota2Swap</a>
         <ul class="nav">
             <li class="active"><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="#">Items</a></li>
+            <li><a href="#">Champions</a></li>
+            <li><a href="#">Users</a></li>
         </ul>
         {% if user.is_authenticated %}
-        <p class="navbar-text pull-right menu-text">Logged as {{ user }} / <a href="{% url 'logout' %}">Logout</a></p>
+        <p class="navbar-text pull-right menu-text">Logged as {{ user }} / <a href="{% url 'user_profile' user.steam_id %}">Profile</a> / <a href="{% url 'logout' %}">Logout</a></p>
         {% else %}
         <a class="menu-image pull-right" href="{% url 'socialauth_begin' 'steam' %}"><img src="{% static 'img/steam-login.png' %}" alt="Login with Steam" /></a>
         {% endif %}

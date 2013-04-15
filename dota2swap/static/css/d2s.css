@@ -1,13 +1,24 @@
-.menu-image {
+a.menu-image {
     line-height: 46px;
     vertical-align: middle;
 }
 
-.menu-text a {
+p.menu-text a {
     color: rgb(45, 134, 185);
 }
 
-.menu-text a:hover, .menu-text a:focus {
+p.menu-text a:hover, .menu-text a:focus {
     color: rgb(60, 158, 216);
     text-decoration: none;
+}
+
+div#container {
+    padding: 10px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+img.profile-avatar {
+    float: left;
+    margin-right: 10px;
 }

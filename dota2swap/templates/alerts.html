@@ -1,0 +1,10 @@
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success' or message.tags == 'error' %}
+            <div class="alert alert-{{ message.tags }} fade in">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>{{ message.tags|capfirst }}!</strong> {{ message }}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}

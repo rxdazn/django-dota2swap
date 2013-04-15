@@ -115,6 +115,3 @@ class Member(AbstractBaseUser):
             return 'Couldn\'t update inventory. Backpack is private.'
         elif inventory_json['status'] is 18:
             return 'Couldn\'t update inventory. Backpack is private.'
-
-
-
