@@ -14,14 +14,14 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(PROJECT_DIR, 'db/dota2swap.db'),
-        #'USER': '',
-        #'PASSWORD': '',
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django_d2s',
-        'USER': 'rxdazn',
-        'PASSWORD': 'rxdazn',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(PROJECT_DIR, 'db/dota2swap.db'),
+        'USER': '',
+        'PASSWORD': '',
+        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #'NAME': 'django_d2s',
+        #'USER': 'rxdazn',
+        #'PASSWORD': 'rxdazn',
         'HOST': '',
         'PORT': '',
     }
@@ -85,7 +85,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
-    'south',
+    #'south',
     'debug_toolbar',
     'social_auth',
     'dota2swap',
@@ -108,7 +108,16 @@ DEBUG_TOOLBAR_CONFIG = {
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.steam.SteamBackend',
     'django.contrib.auth.backends.ModelBackend',
-)
+    )
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_auth.backends.pipeline.social.social_auth_user',
+    'social_auth.backends.pipeline.user.get_username',
+    'social_auth.backends.pipeline.user.create_user',
+    'social_auth.backends.pipeline.social.associate_user',
+    'social_auth.backends.pipeline.user.update_user_details',
+    'accounts.pipeline.user_update_handler',
+    )
 
 STEAM_API_KEY = settings_local.STEAM_API_KEY
 

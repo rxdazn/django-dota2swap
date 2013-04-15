@@ -27,7 +27,7 @@ class Member(AbstractBaseUser):
     username = models.CharField(max_length=50) # permanent username
     nickname  = models.CharField(max_length=128) # display name
     steam_id = models.CharField(max_length=20)
-    email = models.EmailField(max_length=256, null=True, blank=True, unique=True, db_index=True)
+    email = models.EmailField(max_length=256, null=True, blank=True)
     date_joined = models.DateTimeField()
     avatar_small = models.URLField()
     avatar_medium = models.URLField()
@@ -58,6 +58,8 @@ class Member(AbstractBaseUser):
         return True
 
     def user_creation_handler(sender, user, response, details, **kwargs):
+        print '===> !!! create user'
+        now = timezone.now()
         user.steam_id = details['player']['steamid']
         return True
 
