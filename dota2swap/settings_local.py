@@ -2,13 +2,6 @@
 
 PROJECT_SECRET_KEY = '_i@3wk^q^umfgv$4(*!%i^u!agbl)9a*_w#228p^!dv&amp;q!^g-$'
 
-# db
-
-DB_NAME = 'dota2swap'
-DB_USER = 'rxdazn'
-DB_PW = ')T0j?WD_x0'
-DB_HOST = '127.0.0.1'
-
 # steam
 
 STEAM_OPENID_ENDPOINT = 'http://steamcommunity.com/openid'
