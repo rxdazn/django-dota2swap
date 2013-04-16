@@ -8,7 +8,7 @@
         <link href="{% static 'css/d2s.css' %}" rel="stylesheet" type="text/css" />
     </head>
     <body>
-        <div class="navbar navbar-static-top">
+        <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <a class="brand" href="{% url 'home' %}">Dota2Swap</a>
                 <ul class="nav">
@@ -18,7 +18,7 @@
                     {% block menu_users %}<li><a href="#">Users</a></li>{% endblock %}
                 </ul>
                 {% if user.is_authenticated %}
-                <p class="navbar-text pull-right menu-text">Logged as {{ user }} / <a href="{% url 'user_profile' user.steam_id %}">Profile</a> / <a href="{% url 'logout' %}">Logout</a></p>
+                <p class="navbar-text pull-right menu-text">Logged as {{ user }} / <a href="{% url 'user_profile' user.id %}">Profile</a> / <a href="{% url 'logout' %}">Logout</a></p>
                 {% else %}
                 <a class="menu-image pull-right" href="{% url 'socialauth_begin' 'steam' %}"><img src="{% static 'img/steam-login.png' %}" alt="Login with Steam" /></a>
                 {% endif %}

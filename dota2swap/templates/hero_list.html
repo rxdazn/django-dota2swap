@@ -10,10 +10,15 @@
     <tbody>
         {% for hero in heroes %}
             {% if hero.available %}
-            <tr>
-                <td><img src="{{ hero.image_small }}" alt="{{ hero.localized_name }} image" /></td>
-                <td>{{ hero.localized_name }}</td>
-            </tr>
+                {% cycle '<tr>' '' %}
+                    <td><center><img src="{{ hero.image_small }}" alt="{{ hero.localized_name }} image" /></center></td>
+                    <td>{{ hero.localized_name }}</td>
+                {% cycle '' '</tr>' as endtag %}
+                {% if forloop.last and endtag == '' %}
+                        <td></td>
+                        <td></td>
+                    </tr>
+                {% endif %}
             {% endif %}
         {% endfor %}
     </tbody>

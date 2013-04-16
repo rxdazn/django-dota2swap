@@ -8,5 +8,5 @@ def home(request):
     return render(request, 'home.html')
 
 def hero_list(request):
-    heroes = Hero.objects.all()
+    heroes = Hero.objects.filter(available=True)
     return render(request, 'hero_list.html', {'heroes': heroes})

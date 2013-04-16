@@ -2,6 +2,8 @@
 
 {% block title %}{{ view_user.username }}'s profile{% endblock %}
 
+{% block menu_users %}<li class="active"><a href="#">Users</a></li>{% endblock %}
+
 {% block body %}
 
 <img class="profile-avatar" src="{{ view_user.avatar_medium }}" alt="avatar" />

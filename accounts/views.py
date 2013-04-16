@@ -20,9 +20,9 @@ def logout(request):
     messages.success(request, 'You are now disconnected.')
     return redirect('home')
 
-def user_profile(request, steam_id):
+def user_profile(request, user_id):
     try:
-        view_user = Member.objects.get(steam_id=steam_id)
+        view_user = Member.objects.get(id=user_id)
     except:
         messages.error(request, 'The requested user does not exist.')
         return redirect('home')

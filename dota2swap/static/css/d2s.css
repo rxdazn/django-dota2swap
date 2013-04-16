@@ -13,9 +13,7 @@ p.menu-text a:hover, .menu-text a:focus {
 }
 
 div#container {
-    padding: 10px;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
+    padding: 60px 10px 10px 10px;
 }
 
 img.profile-avatar {
