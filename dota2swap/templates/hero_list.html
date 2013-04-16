@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Heroes{% endblock %}
+
+{% block menu_heroes %}<li class="active"><a href="{% url 'hero_list' %}">Heroes</a></li>{% endblock %}
+
+{% block body %}
+
+<table class="table table-bordered table-striped table-hover">
+    <tbody>
+        {% for hero in heroes %}
+            {% if hero.available %}
+            <tr>
+                <td><img src="{{ hero.image_small }}" alt="{{ hero.localized_name }} image" /></td>
+                <td>{{ hero.localized_name }}</td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

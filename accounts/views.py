@@ -7,6 +7,14 @@ import django.contrib.auth
 
 from accounts.models import Member
 
+def login_success(request):
+    messages.success(request, 'Welcome %s!' % request.user.username)
+    return redirect('home')
+
+def login_error(request):
+    messages.error(request, 'Login failed.')
+    return redirect('home')
+
 def logout(request):
     django.contrib.auth.logout(request)
     messages.success(request, 'You are now disconnected.')

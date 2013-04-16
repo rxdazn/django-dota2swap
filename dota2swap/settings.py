@@ -94,8 +94,8 @@ INSTALLED_APPS = (
 )
 
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGIN_ERROR_URL = '/login_error'
+LOGIN_REDIRECT_URL = '/login/success'
+LOGIN_ERROR_URL = '/login/error'
 
 # django-debug-toolbar
 INTERNAL_IPS = ('127.0.0.1',)

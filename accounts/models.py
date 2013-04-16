@@ -32,6 +32,7 @@ class Member(AbstractBaseUser):
     avatar_small = models.URLField()
     avatar_medium = models.URLField()
     avatar_full = models.URLField()
+    personastate = models.IntegerField(default=0)
     reputation = models.IntegerField(default=0)
     transactions_completed = models.IntegerField(default=0)
     items = models.ManyToManyField('shop.InventoryItem')
@@ -101,7 +102,7 @@ class Member(AbstractBaseUser):
                         level=item['level'],
                         quantity=item['quantity'],
                         origin=origin,
-                        inventory=item.get('inventory'),
+                        inventory=0,
                         flag_cannot_trade=item.get('flag_cannot_trade'),
                         flag_cannot_craft=item.get('flag_cannot_craft'),
                         quality=quality,
