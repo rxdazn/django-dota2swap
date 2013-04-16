@@ -23,7 +23,9 @@ def logout(request):
 def user_profile(request, user_id):
     try:
         view_user = Member.objects.get(id=user_id)
+        backpack_items = view_user.items.order_by('slot_number')
     except:
         messages.error(request, 'The requested user does not exist.')
         return redirect('home')
-    return render(request, 'user_profile.html', {'view_user': view_user})
+    return render(request, 'user_profile.html', {'view_user': view_user,
+        'backpack_items': backpack_items})

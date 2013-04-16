@@ -11,5 +11,5 @@ def user_update_handler(backend, details, response, user=None, is_new=False, *ar
     user.personastate = details['player']['personastate']
     user.social_user = kwargs['social_user']
     user.save()
-    #user.update_inventory()
+    user.update_inventory()
     return user

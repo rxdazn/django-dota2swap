@@ -114,9 +114,11 @@ class ItemSet(models.Model):
     attributes = models.ManyToManyField(ItemAttribute, null=True, blank=True)
 
 class InventoryItem(models.Model):
+    base_item = models.ForeignKey(Item, null=True, blank=True)
     unique_id = models.IntegerField()
     original_id = models.IntegerField()
     defindex = models.IntegerField()
+    slot_number = models.IntegerField()
     level = models.IntegerField()
     quantity = models.IntegerField()
     origin = models.ForeignKey(ItemOrigin, null=True, blank=True)
