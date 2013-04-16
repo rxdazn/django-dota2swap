@@ -71,56 +71,72 @@ class Member(AbstractBaseUser):
         from dota2swap.utils.api import SteamWrapper
         from shop import models
 
-        inventory_json = SteamWrapper.get_player_inventory(self.steam_id)['result']
-        if inventory_json['status'] is 1:
-            items = []
-            for item in inventory_json['items']:
-                origin=None
-                if 'origin' in item:
-                    origin = models.ItemOrigin.objects.get(value=item['origin'])
-                quality = models.ItemQuality.objects.get(value=item['quality'])
-                attributes = []
-                if 'attributes' in item:
-                    for attribute in item['attributes']:
-                        account_info = None
-                        if 'account_info' in attribute:
-                            account_info = models.AccountInfo(
-                                    steam_id=attribute['account_info'],
-                                    personaname=attribute['personaname'])
-                        attribute = models.InventoryItemAttribute.objects.create(
-                            defindex=attribute['defindex'],
-                            value=attribute['value'],
-                            float_value=attribute.get('float_value'),
-                            account_info=account_info)
-                        attributes.append(attribute)
+        player_backpack = SteamWrapper.get_player_inventory(self.steam_id)
+        if 'result' not in player_backpack:
+            print 'player_backpack', player_backpack.keys()
+            print 'Error fetching user backpack'
+            return None
+        else:
+            inventory_json = player_backpack['result']
+            if inventory_json['status'] is 1:
+                items = []
 
-                print 'item', item
-                item = models.InventoryItem(
-                        unique_id=item['id'],
-                        original_id=item['original_id'],
-                        defindex=item['defindex'],
-                        level=item['level'],
-                        quantity=item['quantity'],
-                        origin=origin,
-                        inventory=0,
-                        flag_cannot_trade=item.get('flag_cannot_trade'),
-                        flag_cannot_craft=item.get('flag_cannot_craft'),
-                        quality=quality,
-                        custom_name=item.get('custom_name'),
-                        custom_description=item.get('custom_desc'),
-                        contained_item=item.get('contained_item'),
-                        )
-                try:
-                    item.save()
-                except Exception as e:
-                    print 'except', dir(e)
-                    print '-->', e.pgcode, e.pgerror, e.message
-                #item.attributes.add(*attributes)
-            return 'Sucessfuly updated inventory.'
+                print 'backpack has {0} items', inventory_json['items'].__len__()
+                for item in inventory_json['items']:
+                    try:
+                        item = models.InventoryItem.objects.get(unique_id=item['id'])
+                        print 'object already exists'
+                        related_members = item.member_set.all()
+                        if related_members:
+                            if related_members[0].steam_id != self.steam_id:
+                                print 'diff owner', related_members[0].steam_id, self.steam_id
+                                item.member_set.remove(related_members) # change owner if found in another backpack
+                                item.member_set.add(self)
+                    except models.InventoryItem.DoesNotExist:
+                        origin=None
+                        if 'origin' in item:
+                            origin = models.ItemOrigin.objects.get(value=item['origin'])
+                        quality = models.ItemQuality.objects.get(value=item['quality'])
+                        attributes = []
+                        if 'attributes' in item:
+                            for attribute in item['attributes']:
+                                account_info = None
+                                if 'account_info' in attribute:
+                                    account_info = models.AccountInfo(
+                                            steam_id=attribute['account_info'],
+                                            personaname=attribute['personaname'])
+                                base_attribute = models.Attribute.objects.get(defindex=attribute['defindex'])
+                                attribute = models.InventoryItemAttribute.objects.create(
+                                    attribute=base_attribute,
+                                    value=attribute['value'],
+                                    float_value=attribute.get('float_value'),
+                                    account_info=account_info)
+                                attributes.append(attribute)
+                        # item only added if it is not in the user's backpack yet
+                        item = models.InventoryItem(
+                                unique_id=item['id'],
+                                original_id=item['original_id'],
+                                defindex=item['defindex'],
+                                level=item['level'],
+                                quantity=item['quantity'],
+                                origin=origin,
+                                inventory=item.get('inventory'),
+                                flag_cannot_trade=item.get('flag_cannot_trade'),
+                                flag_cannot_craft=item.get('flag_cannot_craft'),
+                                quality=quality,
+                                custom_name=item.get('custom_name'),
+                                custom_description=item.get('custom_desc'),
+                                contained_item=item.get('contained_item'),)
+                        item.save()
+                        item.attributes.add(*attributes)
+                        items.append(item)
+                print '%d items to add' % items.__len__()
+                self.items.add(*items)
+                return 'Sucessfuly updated inventory.'
 
-        elif inventory_json['status'] is 8:
-            return 'Couldn\'t update inventory. The steamid parameter was invalid or missing.'
-        elif inventory_json['status'] is 15:
-            return 'Couldn\'t update inventory. Backpack is private.'
-        elif inventory_json['status'] is 18:
-            return 'Couldn\'t update inventory. Backpack is private.'
+            elif inventory_json['status'] is 8:
+                return 'Couldn\'t update inventory. The steamid parameter was invalid or missing.'
+            elif inventory_json['status'] is 15:
+                return 'Couldn\'t update inventory. Backpack is private.'
+            elif inventory_json['status'] is 18:
+                return 'Couldn\'t update inventory. Backpack is private.'

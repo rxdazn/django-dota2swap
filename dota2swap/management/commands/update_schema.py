@@ -258,7 +258,9 @@ class Command(NoArgsCommand):
         self.verbosity = options.get('verbosity')
         self.stdout.write('Fetching item schema...')
         schema = SteamWrapper.get_schema()
-        if schema['result']['status']:
+        if 'result' not in schema:
+            self.stderr.write('Unable to fetch schema. Steam API might be down.\n')
+        elif schema['result']['status']:
             self.stdout.write('Successfully fetched item schema.')
             result = schema['result']
 

@@ -11,4 +11,12 @@
     </h1>
 </div>
 
+<h2>Backpack</h2>
+
+<ul>
+    {% for item in view_user.items.all %}
+        <li>{{ item.unique_id }} </li>
+    {% endfor %}
+</ul>
+
 {% endblock %}
