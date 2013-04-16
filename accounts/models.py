@@ -113,10 +113,19 @@ class Member(AbstractBaseUser):
                                     account_info=account_info)
                                 attributes.append(attribute)
                         # item only added if it is not in the user's backpack yet
+                        base_item = models.Item.objects.get(defindex=item['defindex'])
+                        # inventory slot number is stored in the last 16 bits
+                        # of the item['inventory'] 32 bit unsigned int
+                        # int32 -> binary -> slice last 16 bits -> construct int from base 2
+                        # first row of inventory (5) items have their
+                        # slot_number set to 0 so they are randomly displayed
+                        slot_number = int(bin(item['inventory'])[-16:], 2)
                         item = models.InventoryItem(
+                                base_item=base_item,
                                 unique_id=item['id'],
                                 original_id=item['original_id'],
                                 defindex=item['defindex'],
+                                slot_number=slot_number,
                                 level=item['level'],
                                 quantity=item['quantity'],
                                 origin=origin,
