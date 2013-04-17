@@ -10,6 +10,7 @@ urlpatterns = patterns('',
      url(r'^hero/list$', 'dota2swap.views.hero_list', name='hero_list'),
      url(r'^admin/', include(admin.site.urls)),
      url(r'', include('accounts.urls')),
+     url(r'', include('shop.urls')),
      url(r'', include('social_auth.urls')),
 )
 
