@@ -4,11 +4,12 @@
 
 # this dictionary contains hero name extracted from items image paths
 # and their corresponding name in the hero api endpoint
+# item['image_inventory'] extracted hero name -> hero['name']
 
-HERO_LIST = {
+HERO_DICT = {
      u'alchemist': 'npc_dota_hero_alchemist',
      u'antimage': 'npc_dota_hero_antimage',
-     u'axe': 'npc_dota_hero_antimage',
+     u'axe': 'npc_dota_hero_axe',
      #u'bane': 'npc_dota_hero_bane', # no items yet
      u'batrider': 'npc_dota_hero_batrider',
      u'beastmaster': 'npc_dota_hero_beastmaster',
