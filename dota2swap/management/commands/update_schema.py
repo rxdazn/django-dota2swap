@@ -4,6 +4,8 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.management.base import NoArgsCommand
 
 from dota2swap.utils.api import SteamWrapper
+from dota2swap.models import Hero
+
 from shop import models
 
 
@@ -90,20 +92,6 @@ class Command(NoArgsCommand):
                     attribute.defindex,)
                     )
 
-#    def process_item_sets(self, result):
-#        self.stdout.write('Processing item sets (%d)...' %
-#                len(result['item_sets']))
-#
-#        for item_set in result['item_sets']:
-#            iset, created = models.ItemSet.objects.get_or_create(
-#                item_set=item_set['item_set'],
-#                name=item_set['name'],
-#                store_bundle=item_set['store_bundle'],
-#                )
-#            if created and self.verbosity:
-#                self.stdout.write('created item set name %s' %(
-#                    iset.name,)
-#                    )
 
     def process_kill_eater_ranks(self, result):
         self.stdout.write('Processing item kill eater ranks (%d)...' %
@@ -168,10 +156,17 @@ class Command(NoArgsCommand):
                     )
 
     def process_items(self, result):
+
+        from dota2swap.utils.heroes_matching import HERO_DICT
+            # Steam API does not indicate corresponding hero names in item['image_inventory']
+            # hero fields to hero endpoint names.
+            # dota2swap.utils.heroes_matching.HERO_DICT is a handmade
+            # correspondence dictionary
+
         self.stdout.write('Processing items (%d)...' %
                 len(result['items']))
 
-        for val, item in enumerate(result['items']):
+        for item in result['items']:
             quality = models.ItemQuality.objects.get(value=item['item_quality'])
             capabilities = None
             if 'capabilities' in item:
@@ -195,34 +190,44 @@ class Command(NoArgsCommand):
                     attributes.append(attribute)
             try:
                 obj = models.Item.objects.get(defindex=item['defindex'])
-                #print 'obj already existing !', [(field.name, field.value) for field in obj._meta.fields()]
             except models.Item.DoesNotExist:
-                item_infos = {
-                    'defindex': item['defindex'],
-                    'name': item['name'],
-                    'description_token': item['item_name'],
-                    'type_token': item['item_type_name'],
-                    'proper_name': item['proper_name'],
-                    'quality': quality,
-                    'item_class': item['item_class'],
-                    'image': item['image_url'],
-                    'image_large': item['image_url_large'],
-                    'item_set': item.get('item_set'),
-                    'min_ilevel': item['min_ilevel'],
-                    'max_ilevel': item['max_ilevel'],
-                }
                 obj = models.Item(**item_infos)
-                if capabilities:
-                    obj.capabilities = capabilities
-                obj.save()
-                obj.attributes.add(*attributes)
-                if self.verbosity:
-                    self.stdout.write('obj defindex %d: %s' % (obj.defindex, obj.name))
-            #if val > 9: #only creating 10 for now -- testing
-                #break
+            item_infos = {
+                'defindex': item['defindex'],
+                'name': item['name'],
+                'item_name': item['item_name'],
+                'type': item['item_type_name'],
+                'proper_name': item['proper_name'],
+                'quality': quality,
+                'item_class': item['item_class'],
+                'image_inventory': item['image_inventory'],
+                'image': item['image_url'],
+                'image_large': item['image_url_large'],
+                'item_set': item.get('item_set'),
+                'min_ilevel': item['min_ilevel'],
+                'max_ilevel': item['max_ilevel'],
+            }
+            if item['image_inventory'] and 'econ/items/' in item['image_inventory']:
+                # sets corresponding hero -- if hero item
+                # 'econ/items/witchdoctor/horn_mask' split using '/'
+                # ['econ', 'items', 'witchdoctor', 'horn_mask'] gets hero name
+                # at pos. 2
+                # hero_names contains 'courier' and 'wards' too
+                potential_hero = item['image_inventory'].split('/')[2]
+                hero_name = HERO_DICT.get(potential_hero)
+                if hero_name:
+                    obj.hero = Hero.objects.get(name=hero_name)
+            obj.__dict__.update(**item_infos)
+            if capabilities:
+                obj.capabilities = capabilities
+            obj.save()
+            obj.attributes.add(*attributes)
+            if self.verbosity:
+                self.stdout.write('obj defindex %d: %s' % (obj.defindex, obj.name))
+            
+
 
     def process_item_sets(self, result):
-        # FIXME items ?
         self.stdout.write('Processing item sets (%d)...' %
                 len(result['item_sets']))
 

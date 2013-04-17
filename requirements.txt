@@ -1,5 +1,6 @@
 Django==1.5
 South==0.7.6
+django-dajaxice==0.5.5
 django-debug-toolbar==0.9.4
 django-openid-auth==0.4
 -e git+https://github.com/omab/django-social-auth.git#egg=django-social-auth

@@ -90,17 +90,18 @@ class InventoryItemAttribute(ItemAttribute):
 class Item(models.Model):
     defindex = models.IntegerField(unique=True) # item's unique ID
     name = models.CharField(max_length=100) # proper name with spaces
-    type_token = models.CharField(max_length=100) # #DOTA_WearableTyep_Daggers
-    description_token = models.CharField(max_length=100) # #DOTA_Item_Rikis_Dagger
+    type = models.CharField(max_length=100) # #DOTA_WearableTyep_Daggers
+    item_name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
     capabilities = models.ForeignKey(ItemCapabilities, null=True, blank=True)
-    #tool = models.ForeignKey(Tool, null=True, blank=True) # e.g bundles #OpenPack token
     attributes = models.ManyToManyField(ItemAttribute, null=True, blank=True)
     proper_name = models.BooleanField() # 'The' prefixed
     item_class = models.CharField(max_length=100)
     quality = models.ForeignKey(ItemQuality)
+    image_inventory = models.CharField(max_length=200, null=True, blank=True)
     image = models.URLField()
     image_large = models.URLField()
+    hero = models.ForeignKey('dota2swap.Hero', related_name='items', null=True, blank=True)
     item_set = models.CharField(max_length=100, null=True, blank=True)
     min_ilevel = models.IntegerField(default=1)
     max_ilevel = models.IntegerField(default=1)
