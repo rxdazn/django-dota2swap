@@ -36,7 +36,6 @@ class Member(AbstractBaseUser):
     reputation = models.IntegerField(default=0)
     transactions_completed = models.IntegerField(default=0)
     items = models.ManyToManyField('shop.InventoryItem')
-    # transactions = models.ForeignKey(Transaction)
     is_admin = models.BooleanField(default=False)
 
     objects = MemberManager()

@@ -131,7 +131,13 @@ class InventoryItem(models.Model):
     contained_item = models.CharField(max_length=600, null=True, blank=True)
     attributes = models.ManyToManyField(InventoryItemAttribute, null=True, blank=True)
 
-
 class Transaction(models.Model):
     item_pack = models.ManyToManyField(InventoryItem)
-    visible = models.BooleanField(default=True)
+    active = models.BooleanField(default=True)
+    seller = models.ForeignKey(Member, related_name='transactions_seller', null=True, blank=True, default=None)
+    buyer = models.ForeignKey(Member, related_name='transactions_buyer', null=True, blank=True, default=None)
+
+class Offer(models.Model):
+    offerer = models.ForeignKey(Member, related_name='offers')
+    transaction = models.ForeignKey(Transaction, related_name='offers')
+
