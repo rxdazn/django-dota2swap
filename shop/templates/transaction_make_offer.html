@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Make offer{% endblock %}
+
+{% block menu_transactions %}
+    <li class="active dropdown">
+        {% include 'menu_transactions.html' %}
+    </li>
+{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <h1>Transaction {{ transaction.id }} <small><a href="{% url 'user_profile' transaction.seller.id %}">by {{ transaction.seller.username }}</a></small></h1>
+    {% for item in transaction.item_pack.all %}
+
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block script_js %}
+
+$(document).ready(function() {
+    $('.item_holder').dblclick(function() {
+       // var currentItemPack = $('#transaction-form :input').filter("[name=item]");
+       // var alreadyInList = false;
+       // for (var i = 0; i < currentItemPack.length; i++) {
+       //     console.log('current item', currentItemPack[i].attr('inventory-id'));
+       //     //if ($(this).attr('inventory-id') == currentItemPack[i].attr('inventory-id')) {
+       //     //    alreadyInList = true;
+       //     //    break;
+       //     //}
+       // }
+        if (!alreadyInList) {
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'item',
+                value: $(this).attr('inventory-id')
+            }).appendTo('#transaction-form');
+            $('<img>').attr({
+                src: $(this).attr('src-image'),
+                style: 'width: 32px; height: 32px; margin-right: 10px',
+                class: 'transaction-item-image',
+            }).attr('data-toggle', 'popover')
+            .attr('data-placement', 'right')
+            .attr('data-original-title', $(this).attr('data-original-title'))
+            .attr('data-content', $(this).attr('data-content'))
+            .appendTo("#item-list");
+            $('.transaction-item-image').popover({ trigger: 'hover' });
+        }
+        $('#inventory').modal('hide');
+    });
+});
+
+{% endblock %}

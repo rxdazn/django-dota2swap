@@ -2,6 +2,7 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.http import HttpResponse
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 
 from accounts.models import Member
 from shop.models import Item
@@ -80,6 +81,15 @@ def my_transactions(request):
         return render(request, 'my_transactions.html')
     transactions = Transaction.objects.filter(seller=request.user)
     return render(request, 'my_transactions.html', {'transactions': transactions})
+
+@login_required
+def transaction_make_offer(request, transaction_id):
+    try:
+        transaction = Transaction.objects.get(id=transaction_id)
+    except:
+        messages.error(request, 'Wrong transaction.')
+        return redirect('home')
+    return render(request, 'transaction_make_offer.html', {'transaction': transaction})
 
 def transaction_detail(request, transaction_id):
     try:
