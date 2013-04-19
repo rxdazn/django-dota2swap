@@ -76,3 +76,17 @@ def my_transactions(request):
         return render(request, 'my_transactions.html')
     transactions = Transaction.objects.filter(seller=request.user)
     return render(request, 'my_transactions.html', {'transactions': transactions})
+
+def transaction_detail(request, transaction_id):
+    try:
+        transaction_id = int(transaction_id)
+        transaction = Transaction.objects.get(id=transaction_id)
+    except:
+        messages.error(request, 'This transaction doesn\'t exist.')
+        return redirect('all_transactions')
+    if not request.user.steam_id == transaction.seller.steam_id:
+        messages.error(request, 'You are not allowed to see seller details on this transaction.')
+        return redirect('all_transactions')
+    else:
+        pass
+    return render(request, 'transaction_detail.html', {'transaction': transaction})

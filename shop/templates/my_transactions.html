@@ -36,7 +36,7 @@
                     {% endfor %}
                 </td>
                 <td>{{ transaction.offers.all|length }}</td>
-                <td><a class="btn btn-primary" href="#"><i class="icon-cog icon-white"></i> Details</a></td>
+                <td><a class="btn btn-primary" href="{% url 'transaction_detail' transaction.id %}"><i class="icon-cog icon-white"></i> Details</a></td>
             </tr>
         {% endfor %}
     </tbody>

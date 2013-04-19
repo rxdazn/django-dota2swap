@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}rxdazn's transaction {{ transaction.id }}{% endblock %}
+
+{% block menu_transactions %}
+    <li class="active dropdown">
+        {% include 'menu_transactions.html' %}
+    </li>
+{% endblock %}
+
+{% block body %}
+   
+<div class="page-header">
+    <h1>Your transaction id</h1>
+    <h2>id : {{ transaction.id }}</h2>
+</div>
+
+<div id="transaction-detail-items">
+    <h3>Item pack</h3>
+    <div id="detail-item-pack">
+        {% for item in transaction.item_pack.all %}
+        <div class="item_holder"  data-toggle="popover" data-placement="top"
+            data-original-title="{{ item.base_item.name }}"
+            data-content="{{ item.base_item.description|safe}}">
+            <img src="{{ item.base_item.image }}" alt="{{ item.base_item.name }} image"/>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h3>Comment</h3>
+    <div>
+        <p>
+            {{ transaction.comment }}
+        </p>
+    </div> 
+
+    <h3>Offers</h3>
+    {% if transaction.offers.all %}
+        <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th style="width: 10%">Reference</th>
+                <th style="width: 15%">Seller</th>
+                <th style="width: 10%">Points</th>
+                <th style="width: 50%">Items</th>
+                <th style="width: 10%">Make an offer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for offer in transaction.offers.all %}
+                <tr>
+                    <td>{{ offer.id }}</td>
+                    <td><a href="{% url 'user_profile' transaction.seller.id %}">{{ offer.offerer.username }}</a></td>
+                    <td>points</td>
+                    <td>
+                        {% for item in offer.item_pack.all %}
+                            <img class="transaction-item-image" data-toggle="popover" data-placement="top" data-original-title="{{ item.base_item.name }}" data-content="{{ item.base_item.description|safe }}" src="{{ item.base_item.image }}" src="{{ item.base_item.image }}" style="width: 32px; height: 32px" />
+                        {% endfor %}
+                    </td>
+                    <td>
+                            <a class="btn btn-primary" href="#"><i class="icon-thumbs-up icon-white"></i>Accept</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    {% else %}
+        <p>No offers yet</p>
+    {% endif %}
+</div>
+
+{% endblock %}

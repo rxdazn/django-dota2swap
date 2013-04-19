@@ -56,3 +56,8 @@ img.profile-avatar {
 .item_holder img {
     padding-top: 18px;
 }
+
+#detail-item-pack {
+    display: table;
+    clear: both;
+}
