@@ -11,7 +11,9 @@
         {% for hero in heroes %}
             {% cycle '<tr>' '' %}
                 <td onclick="javascript: location.href='{% url 'all_transactions_by_hero' hero.id %}'" style="cursor: pointer"><center><img src="{{ hero.image_small }}" alt="{{ hero.localized_name }} image" /></center></td>
-                <td onclick="javascript: location.href='{% url 'all_transactions_by_hero' hero.id %}'" style="cursor: pointer">{{ hero.localized_name }}</td>
+                <td onclick="javascript: location.href='{% url 'all_transactions_by_hero' hero.id %}'" style="cursor: pointer">{{ hero.localized_name }}
+                        <a class="btn btn-primary" style="float: right" href="{% url 'hero_items_by_id' hero.id %}"><i class="icon-th icon-white"></i>See all items</a>
+                </td>
             {% cycle '' '</tr>' as endtag %}
             {% if forloop.last and endtag == '' %}
                     <td></td>

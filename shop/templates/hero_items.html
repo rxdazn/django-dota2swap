@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ hero.localized_name }}'s items {% endblock %}
+
+{% block menu_home %}<li class="active"><a href="{% url 'hero_list' %}">Home</a></li>{% endblock %}
+
+{% block body %}
+
+    <h1>{{ hero.localized_name }}'s items</h1>
+    <div id="hero-item-list">
+    {% for item in items %}
+        <div class="item_holder"  data-toggle="popover" data-placement="top"
+            data-original-title="{{ item.name }}"
+            data-content="{{ item.description|safe}}">
+            <img src="{{ item.image }}" alt="{{ item.name }} image"/>
+        </div>
+    {% empty %}
+        <p>This hero has no items</p>
+    {% endfor %}
+    </div>
+
+{% endblock %}

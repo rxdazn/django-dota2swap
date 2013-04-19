@@ -94,3 +94,22 @@ def transaction_detail(request, transaction_id):
     else:
         pass
     return render(request, 'transaction_detail.html', {'transaction': transaction})
+
+def hero_items_by_id(request, hero_id):
+    try:
+        hero = Hero.objects.get(unique_id=hero_id)
+        items = Item.objects.filter(hero__unique_id=hero.unique_id)
+    except:
+        messages.error(request, 'This hero doesn\'t exist.')
+        return redirect('hero_list')
+    return render(request, 'hero_items.html', {'hero': hero,'items': items})
+
+def hero_items_by_name(request, hero_name):
+    try:
+        print 'hero', hero_name
+        hero = Hero.objects.get(name=hero_name)
+        items = Item.objects.filter(hero__unique_id=hero.unique_id)
+    except:
+        messages.error(request, 'This hero doesn\'t exist.')
+        return redirect('hero_list')
+    return render(request, 'hero_items.html', {'hero': hero, 'items': items})

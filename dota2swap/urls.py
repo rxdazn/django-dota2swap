@@ -7,7 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
      url(r'^$', 'dota2swap.views.home', name='home'),
-     url(r'^hero/list$', 'dota2swap.views.hero_list', name='hero_list'),
+     url(r'^heroes$', 'dota2swap.views.hero_list', name='hero_list'),
      url(r'^admin/', include(admin.site.urls)),
      url(r'', include('accounts.urls')),
      url(r'', include('shop.urls')),
