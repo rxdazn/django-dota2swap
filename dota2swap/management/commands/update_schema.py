@@ -196,6 +196,7 @@ class Command(NoArgsCommand):
                 'defindex': item['defindex'],
                 'name': item['name'],
                 'item_name': item['item_name'],
+                'description': item.get('item_description', 'No description.'),
                 'type': item['item_type_name'],
                 'proper_name': item['proper_name'],
                 'quality': quality,
