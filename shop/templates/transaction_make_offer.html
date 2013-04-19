@@ -13,8 +13,51 @@
 <div class="page-header">
     <h1>Transaction {{ transaction.id }} <small><a href="{% url 'user_profile' transaction.seller.id %}">by {{ transaction.seller.username }}</a></small></h1>
     {% for item in transaction.item_pack.all %}
+        <div class="item_holder"  data-toggle="popover" data-placement="top"
+            data-original-title="{{ item.base_item.name }}"
+            data-content="{{ item.base_item.description|safe}}">
+                <img src="{{ item.base_item.image }}" alt="{{ item.base_item.name }} image"/>
+            </div>
 
     {% endfor %}
+    <form id="transaction-form" action="" method="post">
+        {% csrf_token %}
+        <!-- Affichage du backpack, quand on clique sur un item ajout d'un input hidden avec en value l'id de l'item -->
+        <button data-toggle="modal" data-target="#inventory" id="add-item-btn" class="btn btn-primary" type="button">Add item</button>
+        <div style="padding-top: 15px" id="item-list"></div>
+        <br />
+        {{ form.as_p }}
+        <input class="btn btn-primary" type="submit" value="Submit" />
+    </form>
+
+    <div id="inventory" style="margin-left: -300px" class="modal hide fade" tabindex="-1" role="dialog">
+        <div id="backpack">
+
+            {% for item_page in backpack %}
+                <div class="item_page" {% if not forloop.first %} style="display: none;" {% endif %}>
+                {% for item in item_page %}
+                <div class="item_holder"  data-toggle="popover" data-placement="top"
+                    data-original-title="{{ item.base_item.name }}"
+                    data-content="{{ item.base_item.description|safe}}" inventory-id="{{ item.unique_id }}" src-image="{{ item.base_item.image }}">
+                        <img src="{{ item.base_item.image }}" alt="{{ item.base_item.name }} image"/>
+                 </div>
+                {% empty %}
+                    <p> empty page </p>
+
+                {% endfor %}
+                </div>
+            {% empty %}
+                <p>This backpack is empty or the user's inventory is private</p>
+            {% endfor %}
+
+        </div>
+        <div id="nav-buttons">
+            <ul class="pager">
+                <li class="previous"><a id="page_prev" href="#"> Prev.</a></li>
+                <li class="next" ><a id="page_next" href="#">Next</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
@@ -23,16 +66,6 @@
 
 $(document).ready(function() {
     $('.item_holder').dblclick(function() {
-       // var currentItemPack = $('#transaction-form :input').filter("[name=item]");
-       // var alreadyInList = false;
-       // for (var i = 0; i < currentItemPack.length; i++) {
-       //     console.log('current item', currentItemPack[i].attr('inventory-id'));
-       //     //if ($(this).attr('inventory-id') == currentItemPack[i].attr('inventory-id')) {
-       //     //    alreadyInList = true;
-       //     //    break;
-       //     //}
-       // }
-        if (!alreadyInList) {
             $('<input>').attr({
                 type: 'hidden',
                 name: 'item',
@@ -48,7 +81,6 @@ $(document).ready(function() {
             .attr('data-content', $(this).attr('data-content'))
             .appendTo("#item-list");
             $('.transaction-item-image').popover({ trigger: 'hover' });
-        }
         $('#inventory').modal('hide');
     });
 });

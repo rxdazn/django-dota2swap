@@ -39,7 +39,7 @@
                     {% if user == transaction.seller %}
                         <a class="btn btn-primary" href="{% url 'transaction_detail' transaction.id %}"><i class="icon-cog icon-white"></i> Details</a>
                     {% else %}
-                        <a class="btn btn-primary" href="#"><i class="icon-shopping-cart icon-white"></i> Make an offer</a>
+                    <a class="btn btn-primary" href="{% url 'transaction_make_offer' transaction.id %}"><i class="icon-shopping-cart icon-white"></i> Make an offer</a>
                     {% endif %}
                 </td>
             </tr>

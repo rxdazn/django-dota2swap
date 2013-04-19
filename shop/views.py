@@ -6,9 +6,9 @@ from django.contrib.auth.decorators import login_required
 
 from accounts.models import Member
 from shop.models import Item
-from shop.forms import NewTransactionForm
+from shop.forms import NewTransactionForm, NewOfferForm 
 from shop.models import InventoryItem
-from shop.models import Transaction
+from shop.models import Transaction, Offer
 from dota2swap.models import Hero
 
 def all_transactions(request):
@@ -67,10 +67,10 @@ def new_transaction(request):
                 for it in result:
                     tr.item_pack.add(it)
                 tr.save()
-                messages.success(request, 'Your transaction has been created.')
+                messages.success(request, 'your transaction has been created.')
                 return redirect('my_transactions')
             else:
-                messages.error(request, 'One or more items you wanted to trade are not in your backpack.')
+                messages.error(request, 'one or more items you wanted to trade are not in your backpack.')
     else:
         form = NewTransactionForm()
     return render(request, 'new_transaction.html', {'form': form, 'backpack': backpack})
@@ -89,7 +89,40 @@ def transaction_make_offer(request, transaction_id):
     except:
         messages.error(request, 'Wrong transaction.')
         return redirect('home')
-    return render(request, 'transaction_make_offer.html', {'transaction': transaction})
+    try:
+        view_user = request.user
+        backpack_items = view_user.items.order_by('slot_number')
+    except:
+        messages.error(request, 'The requested user does not exist.')
+        return redirect('home')
+    backpack = []
+    if backpack_items:
+        backpack = [item_page for item_page in _chunks(backpack_items, 25)]
+    if request.method == 'POST':
+        form = NewOfferForm(request.POST)
+        if form.is_valid():
+            print 'form is valid'
+            items = [int(x) for x in request.POST.getlist('item')]
+            print 'items'
+            result = InventoryItem.objects.filter(member=request.user).filter(unique_id__in=items)
+            print 'result', len(result), type(result[0])
+            if len(items) == len(result):
+                of = Offer()
+                of.transaction = transaction
+                of.comment = form.cleaned_data['comment']
+                of.offerer = request.user
+                of.save()
+                for it in result:
+                    of.item_pack.add(it)
+                messages.success(request, 'your offer has been submitted.')
+                return redirect('transaction_detail', transaction_id=transaction.id)
+            else:
+                messages.error(request, 'one or more items you wanted to trade are not in your backpack.')
+    else:
+        form = NewOfferForm()
+        print 'new form', 'request method', request.method
+    #return render(request, 'new_transaction.html', {'form': form, 'backpack': backpack})
+    return render(request, 'transaction_make_offer.html', {'form': form, 'backpack': backpack, 'transaction': transaction})
 
 def transaction_detail(request, transaction_id):
     try:
@@ -98,11 +131,11 @@ def transaction_detail(request, transaction_id):
     except:
         messages.error(request, 'This transaction doesn\'t exist.')
         return redirect('all_transactions')
-    if not request.user.steam_id == transaction.seller.steam_id:
-        messages.error(request, 'You are not allowed to see seller details on this transaction.')
-        return redirect('all_transactions')
-    else:
-        pass
+    #if not request.user.steam_id == transaction.seller.steam_id:
+    #    messages.error(request, 'You are not allowed to see seller details on this transaction.')
+    #    return redirect('all_transactions')
+    #else:
+    #    pass
     return render(request, 'transaction_detail.html', {'transaction': transaction})
 
 def hero_items_by_id(request, hero_id):
