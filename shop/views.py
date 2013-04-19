@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from accounts.models import Member
 from shop.models import Item
-from shop.forms import NewTransactionForm, NewOfferForm 
+from shop.forms import NewTransactionForm, NewOfferForm
 from shop.models import InventoryItem
 from shop.models import Transaction, Offer
 from dota2swap.models import Hero
@@ -101,11 +101,8 @@ def transaction_make_offer(request, transaction_id):
     if request.method == 'POST':
         form = NewOfferForm(request.POST)
         if form.is_valid():
-            print 'form is valid'
             items = [int(x) for x in request.POST.getlist('item')]
-            print 'items'
             result = InventoryItem.objects.filter(member=request.user).filter(unique_id__in=items)
-            print 'result', len(result), type(result[0])
             if len(items) == len(result):
                 of = Offer()
                 of.transaction = transaction
@@ -120,7 +117,6 @@ def transaction_make_offer(request, transaction_id):
                 messages.error(request, 'one or more items you wanted to trade are not in your backpack.')
     else:
         form = NewOfferForm()
-        print 'new form', 'request method', request.method
     #return render(request, 'new_transaction.html', {'form': form, 'backpack': backpack})
     return render(request, 'transaction_make_offer.html', {'form': form, 'backpack': backpack, 'transaction': transaction})
 
