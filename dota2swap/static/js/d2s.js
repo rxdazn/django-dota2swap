@@ -35,5 +35,5 @@ $(document).ready(function() {
     });
 
     $('.item_holder').popover({ trigger: "hover" });
-    $('.item_holder').popover.show();
+    $('.transaction-item-image').popover({ trigger: "hover" });
 });

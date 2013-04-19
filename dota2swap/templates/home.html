@@ -27,7 +27,7 @@
                     <td>points</td>
                     <td>
                         {% for item in transaction.item_pack.all %}
-                            <img src="{{ item.base_item.image }}" style="width: 32px; height: 32px" />
+                            <img class="transaction-item-image" data-toggle="popover" data-placement="top" data-original-title="{{ item.base_item.name }}" data-content="{{ item.base_item.description|safe }}" src="{{ item.base_item.image }}" src="{{ item.base_item.image }}" style="width: 32px; height: 32px" />
                         {% endfor %}
                     </td>
                     <td>

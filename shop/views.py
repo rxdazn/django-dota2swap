@@ -22,7 +22,7 @@ def all_transactions_by_hero(request, hero_id):
     transactions = []
     for tr in result:
         for item in tr.item_pack.all():
-            if item.base_item.hero == hero_id:
+            if item.base_item.hero_id == hero_id:
                 transactions.append(tr)
                 break
     return render(request, 'all_transactions_by_hero.html', {'transactions': transactions, 'hero': hero})
