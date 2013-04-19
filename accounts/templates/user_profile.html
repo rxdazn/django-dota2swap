@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
+{% load dajaxice_templatetags %}
 
 {% block title %}{{ view_user.username }}'s profile{% endblock %}
 
 {% block menu_users %}<li class="active"><a href="#">Users</a></li>{% endblock %}
 
 {% block body %}
+
+{% dajaxice_js_import %}
 
 <img class="profile-avatar" src="{{ view_user.avatar_medium }}" alt="avatar" />
 <div class="page-header">
@@ -13,12 +16,36 @@
     </h1>
 </div>
 
+
 <h2>Backpack</h2>
 
-<ul>
-    {% for item in backpack_items %}
-    <li><img src="{{ item.base_item.image }}" alt="{{ item.base_item.name }}"/></li>
-    {% endfor %}
-</ul>
+    <div id="inventory">
+        <div id="backpack">
+
+            {% for item_page in backpack %}
+                <div class="item_page" {% if not forloop.first %} style="display: none;" {% endif %}>
+                {% for item in item_page %}
+                <div class="item_holder"  data-toggle="popover" data-placement="top"
+                    data-original-title="{{ item.base_item.name }}"
+                    data-content="{{ item.base_item.description|safe}}"> 
+                        <img src="{{ item.base_item.image }}" alt="{{ item.base_item.name }} image"/>
+                    </div>
+                {% empty %}
+                    <p> empty page </p>
+
+                {% endfor %}
+                </div>
+            {% empty %}
+                <p>This backpack is empty or the user's inventory is private</p>
+            {% endfor %}
+
+        </div>
+        <div id="nav-buttons">
+            <ul class="pager">
+                <li class="previous"><a id="page_prev" href="#"> Prev.</a></li>
+                <li class="next" ><a id="page_next" href="#">Next</a></li>
+            </ul>
+        </div>
+    </div>
 
 {% endblock %}
