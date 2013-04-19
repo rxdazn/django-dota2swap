@@ -90,3 +90,17 @@ def transaction_make_offer(request, transaction_id):
         messages.error(request, 'Wrong transaction.')
         return redirect('home')
     return render(request, 'transaction_make_offer.html', {'transaction': transaction})
+
+def transaction_detail(request, transaction_id):
+    try:
+        transaction_id = int(transaction_id)
+        transaction = Transaction.objects.get(id=transaction_id)
+    except:
+        messages.error(request, 'This transaction doesn\'t exist.')
+        return redirect('all_transactions')
+    if not request.user.steam_id == transaction.seller.steam_id:
+        messages.error(request, 'You are not allowed to see seller details on this transaction.')
+        return redirect('all_transactions')
+    else:
+        pass
+    return render(request, 'transaction_detail.html', {'transaction': transaction})
