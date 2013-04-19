@@ -63,22 +63,33 @@
 
 $(document).ready(function() {
     $('.item_holder').dblclick(function() {
-        $('<input>').attr({
-            type: 'hidden',
-            name: 'item',
-            value: $(this).attr('inventory-id')
-        }).appendTo('#transaction-form');
+       // var currentItemPack = $('#transaction-form :input').filter("[name=item]");
+       // var alreadyInList = false;
+       // for (var i = 0; i < currentItemPack.length; i++) {
+       //     console.log('current item', currentItemPack[i].attr('inventory-id'));
+       //     //if ($(this).attr('inventory-id') == currentItemPack[i].attr('inventory-id')) {
+       //     //    alreadyInList = true;
+       //     //    break;
+       //     //}
+       // }
+        if (!alreadyInList) {
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'item',
+                value: $(this).attr('inventory-id')
+            }).appendTo('#transaction-form');
+            $('<img>').attr({
+                src: $(this).attr('src-image'),
+                style: 'width: 32px; height: 32px; margin-right: 10px',
+                class: 'transaction-item-image',
+            }).attr('data-toggle', 'popover')
+            .attr('data-placement', 'right')
+            .attr('data-original-title', $(this).attr('data-original-title'))
+            .attr('data-content', $(this).attr('data-content'))
+            .appendTo("#item-list");
+            $('.transaction-item-image').popover({ trigger: 'hover' });
+        }
         $('#inventory').modal('hide');
-        $('<img>').attr({
-            src: $(this).attr('src-image'),
-            style: 'width: 32px; height: 32px; margin-right: 10px',
-            class: 'transaction-item-image',
-        }).attr('data-toggle', 'popover')
-        .attr('data-placement', 'right')
-        .attr('data-original-title', $(this).attr('data-original-title'))
-        .attr('data-content', $(this).attr('data-content'))
-        .appendTo("#item-list");
-        $('.transaction-item-image').popover({ trigger: 'hover' });
     });
 });
 
