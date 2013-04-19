@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}My transactions{% endblock %}
+
+{% block menu_transactions %}
+    <li class="active dropdown">
+        {% include 'menu_transactions.html' %}
+    </li>
+{% endblock %}
+
+{% block body %}
+
+{% if user.is_authenticated %}
+<div class="page-header">
+    <h1>My transactions</h3>
+</div>
+
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 15%">Status</th>
+            <th style="width: 10%">Reference</th>
+            <th style="width: 50%">Items</th>
+            <th style="width: 10%">Offers</th>
+            <th style="width: 10%">Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+            <tr>
+                <td>status</td>
+                <td>{{ transaction.id }}</td>
+                <td>
+                    {% for item in transaction.item_pack.all %}
+                        <img src="{{ item.base_item.image }}" style="width: 32px; height: 32px" />
+                    {% endfor %}
+                </td>
+                <td>{{ transaction.offers.all|length }}</td>
+                <td><a class="btn btn-primary" href="#"><i class="icon-cog icon-white"></i> Details</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

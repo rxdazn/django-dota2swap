@@ -133,6 +133,7 @@ class InventoryItem(models.Model):
     attributes = models.ManyToManyField(InventoryItemAttribute, null=True, blank=True)
 
 class Transaction(models.Model):
+    comment = models.TextField()
     item_pack = models.ManyToManyField(InventoryItem)
     active = models.BooleanField(default=True)
     seller = models.ForeignKey(Member, related_name='transactions_seller', null=True, blank=True, default=None)

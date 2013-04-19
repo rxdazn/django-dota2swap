@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}New transaction{% endblock %}
+
+{% block menu_transactions %}
+    <li class="active dropdown">
+        {% include 'menu_transactions.html' %}
+    </li>
+{% endblock %}
+
+{% block body %}
+
+{% if user.is_authenticated %}
+    <div class="page-header">
+        <h1>New transaction</h3>
+    </div>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <h3>Backpack:</h3>
+        >> display backpack
+        <!-- Affichage du backpack, quand on clique sur un item ajout d'un input hidden avec en value l'id de l'item -->
+        <input type="hidden" name="item" value="40900118" />
+        <input type="hidden" name="item" value="42950201" />
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+{% endif %}
+
+{% endblock %}

@@ -13,9 +13,12 @@
                 <a class="brand" href="{% url 'home' %}">Dota2Swap</a>
                 <ul class="nav">
                     {% block menu_home %}<li><a href="{% url 'home' %}">Home</a></li>{% endblock %}
-                    {% block menu_items %}<li><a href="{% url 'item_list' %}">Items</a></li>{% endblock %}
+                    {% block menu_transactions %}
+                        <li class="dropdown">
+                            {% include 'menu_transactions.html' %}
+                        </li>
+                    {% endblock %}
                     {% block menu_heroes %}<li><a href="{% url 'hero_list' %}">Heroes</a></li>{% endblock %}
-                    {% block menu_users %}<li><a href="#">Users</a></li>{% endblock %}
                 </ul>
                 {% if user.is_authenticated %}
                     <ul class="nav pull-right">
@@ -44,5 +47,6 @@
         <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
         <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
         <script src="{% static 'js/d2s.js' %}" type="text/javascript"></script>
+        <script type="text/javascript">{% block script_js %}{% endblock %}</script>
     </body>
 </html>

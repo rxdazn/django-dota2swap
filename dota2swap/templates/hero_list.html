@@ -9,16 +9,14 @@
 <table class="table table-bordered table-striped table-hover">
     <tbody>
         {% for hero in heroes %}
-            {% if hero.available %}
-                {% cycle '<tr>' '' %}
-                    <td><center><img src="{{ hero.image_small }}" alt="{{ hero.localized_name }} image" /></center></td>
-                    <td>{{ hero.localized_name }}</td>
-                {% cycle '' '</tr>' as endtag %}
-                {% if forloop.last and endtag == '' %}
-                        <td></td>
-                        <td></td>
-                    </tr>
-                {% endif %}
+            {% cycle '<tr>' '' %}
+                <td onclick="javascript: location.href='{% url 'all_transactions_by_hero' hero.id %}'" style="cursor: pointer"><center><img src="{{ hero.image_small }}" alt="{{ hero.localized_name }} image" /></center></td>
+                <td onclick="javascript: location.href='{% url 'all_transactions_by_hero' hero.id %}'" style="cursor: pointer">{{ hero.localized_name }}</td>
+            {% cycle '' '</tr>' as endtag %}
+            {% if forloop.last and endtag == '' %}
+                    <td></td>
+                    <td></td>
+                </tr>
             {% endif %}
         {% endfor %}
     </tbody>

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}All transactions{% endblock %}
+
+{% block menu_transactions %}
+    <li class="active dropdown">
+        {% include 'menu_transactions.html' %}
+    </li>
+{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <h1>Items to trade</h3>
+</div>
+
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 10%">Reference</th>
+            <th style="width: 15%">Seller</th>
+            <th style="width: 10%">Points</th>
+            <th style="width: 50%">Items</th>
+            <th style="width: 10%">Make an offer</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.id }}</td>
+                <td><a href="{% url 'user_profile' transaction.seller.id %}">{{ transaction.seller.username }}</a></td>
+                <td>points</td>
+                <td>
+                    {% for item in transaction.item_pack.all %}
+                        <img src="{{ item.base_item.image }}" style="width: 32px; height: 32px" />
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if user == transaction.seller %}
+                        <a class="btn btn-primary" href="#"><i class="icon-cog icon-white"></i> Details</a>
+                    {% else %}
+                        <a class="btn btn-primary" href="#"><i class="icon-shopping-cart icon-white"></i> Make an offer</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
