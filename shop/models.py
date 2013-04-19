@@ -133,7 +133,7 @@ class InventoryItem(models.Model):
     attributes = models.ManyToManyField(InventoryItemAttribute, null=True, blank=True)
 
 class Transaction(models.Model):
-    comment = models.TextField()
+    comment = models.TextField(null=True, blank=True)
     item_pack = models.ManyToManyField(InventoryItem)
     active = models.BooleanField(default=True)
     seller = models.ForeignKey(Member, related_name='transactions_seller', null=True, blank=True, default=None)
@@ -141,5 +141,6 @@ class Transaction(models.Model):
 
 class Offer(models.Model):
     offerer = models.ForeignKey(Member, related_name='offers')
+    item_pack = models.ManyToManyField(InventoryItem, related_name='offers')
     transaction = models.ForeignKey(Transaction, related_name='offers')
 
