@@ -16,7 +16,8 @@ def all_transactions(request):
 
 def all_transactions_by_hero(request, hero_id):
     try:
-        hero = Hero.objects.get(id=hero_id)
+        hero_id = int(hero_id)
+        hero = Hero.objects.get(unique_id=hero_id)
     except:
         messages.error('This hero doesn\'t exist.')
         return redirect('home')
@@ -25,9 +26,12 @@ def all_transactions_by_hero(request, hero_id):
     transactions = []
     for tr in result:
         for item in tr.item_pack.all():
-            if item.base_item.hero_id == hero_id:
-                transactions.append(tr)
-                break
+            if item.base_item.hero:
+                print item.base_item.hero.__dict__
+                print type(item.base_item.hero.unique_id), type(hero_id)
+                if item.base_item.hero.unique_id == hero_id:
+                    transactions.append(tr)
+                    break
     return render(request, 'all_transactions_by_hero.html', {'transactions': transactions, 'hero': hero})
 
 def _chunks(obj_list, n):
