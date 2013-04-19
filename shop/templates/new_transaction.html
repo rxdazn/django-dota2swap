@@ -15,16 +15,71 @@
         <h1>New transaction</h3>
     </div>
 
-    <form action="" method="post">
+    <form id="transaction-form" action="" method="post">
         {% csrf_token %}
-        <h3>Backpack:</h3>
-        >> display backpack
         <!-- Affichage du backpack, quand on clique sur un item ajout d'un input hidden avec en value l'id de l'item -->
-        <input type="hidden" name="item" value="40900118" />
-        <input type="hidden" name="item" value="42950201" />
+        <button data-toggle="modal" data-target="#inventory" id="add-item-btn" class="btn btn-primary" type="button">Add item</button>
+        <div style="padding-top: 15px" id="item-list"></div>
+        <br />
         {{ form.as_p }}
-        <input type="submit" value="Submit" />
+        <input class="btn btn-primary" type="submit" value="Submit" />
     </form>
+
+    <div id="inventory" style="margin-left: -300px" class="modal hide fade" tabindex="-1" role="dialog">
+        <div id="backpack">
+
+            {% for item_page in backpack %}
+                <div class="item_page" {% if not forloop.first %} style="display: none;" {% endif %}>
+                {% for item in item_page %}
+                <div class="item_holder"  data-toggle="popover" data-placement="top"
+                    data-original-title="{{ item.base_item.name }}"
+                    data-content="{{ item.base_item.description|safe}}" inventory-id="{{ item.unique_id }}" src-image="{{ item.base_item.image }}">
+                        <img src="{{ item.base_item.image }}" alt="{{ item.base_item.name }} image"/>
+                 </div>
+                {% empty %}
+                    <p> empty page </p>
+
+                {% endfor %}
+                </div>
+            {% empty %}
+                <p>This backpack is empty or the user's inventory is private</p>
+            {% endfor %}
+
+        </div>
+        <div id="nav-buttons">
+            <ul class="pager">
+                <li class="previous"><a id="page_prev" href="#"> Prev.</a></li>
+                <li class="next" ><a id="page_next" href="#">Next</a></li>
+            </ul>
+        </div>
+    </div>
+    </div>
+
 {% endif %}
+
+{% endblock %}
+
+{% block script_js %}
+
+$(document).ready(function() {
+    $('.item_holder').dblclick(function() {
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'item',
+            value: $(this).attr('inventory-id')
+        }).appendTo('#transaction-form');
+        $('#inventory').modal('hide');
+        $('<img>').attr({
+            src: $(this).attr('src-image'),
+            style: 'width: 32px; height: 32px; margin-right: 10px',
+            class: 'transaction-item-image',
+        }).attr('data-toggle', 'popover')
+        .attr('data-placement', 'right')
+        .attr('data-original-title', $(this).attr('data-original-title'))
+        .attr('data-content', $(this).attr('data-content'))
+        .appendTo("#item-list");
+        $('.transaction-item-image').popover({ trigger: 'hover' });
+    });
+});
 
 {% endblock %}
